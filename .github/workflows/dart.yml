@@ -1,0 +1,47 @@
+name: Flutter Build and Test
+
+on:
+  push:
+    branches:
+      - main # Change this to your default branch
+
+jobs:
+  build_and_test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 2.x.x # Change this to your desired Flutter version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build and Test Android
+        run: flutter test
+        env:
+          FLUTTER_TARGET: test_driver/app.dart # Change this to your test file path
+
+      - name: Build and Test iOS
+        run: flutter test
+        env:
+          FLUTTER_TARGET: test_driver/app.dart # Change this to your test file path
+
+      - name: Build Android APK
+        run: flutter build apk
+
+      - name: Build iOS IPA
+        run: flutter build ios --release --no-codesign
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: |
+            build/app/outputs/flutter-apk/app-release.apk
+            build/ios/iphoneos/Runner.app # Adjust this path based on your project structure
