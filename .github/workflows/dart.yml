@@ -21,9 +21,31 @@ jobs:
 
       - name: Install Dependencies
         run: flutter pub get
+     
+      - name: Build Android APK
+        run: flutter build apk
+      - name: Build iOS app
+        run: flutter build ios  
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Upload iOS artifact
+        uses: actions/upload-artifact@v2
+        with:
+         name: ios-build
+         path: build/ios
+
+      - name: Complete workflow
+        run: echo "Workflow completed"
 
      # - name: Analyze Dart Code
       #  run: dart analyze
 
      # - name: Run Flutter Tests
       #  run: flutter test
+
+
+    
